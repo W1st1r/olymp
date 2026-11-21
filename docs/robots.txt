@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://w1st1r.github.io/olymp/sitemap.xml
