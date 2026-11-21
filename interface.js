@@ -72,7 +72,7 @@ if(one('[data-count]')){
 }
 if('IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
  const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('reveal');obs.unobserve(e.target)}}));
- document.querySelectorAll('.section,.telegram-banner').forEach(el=>obs.observe(el));
+ document.querySelectorAll('.world-section,.chronicle,.handbook').forEach(el=>obs.observe(el));
 }
 
 const locationButtons = [...document.querySelectorAll('[data-location]')];

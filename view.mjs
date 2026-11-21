@@ -17,22 +17,6 @@ const locations = [
   {id:'sand-arena', title:'Песчаная арена', alt:'Песчаная площадка арены OLYMP с каменными трибунами'}
 ];
 
-// A hand-set five-letter wordmark. Each rectangle is a run of contiguous pixels.
-function pixelWordmark(){
-  const alphabet = {
-    O:['01110','11011','11011','11011','11011','11011','01110'],
-    L:['11000','11000','11000','11000','11000','11000','11111'],
-    Y:['11011','11011','01010','01110','00100','00100','00100'],
-    M:['10001','11011','11111','11011','11011','11011','11011'],
-    P:['11110','11011','11011','11110','11000','11000','11000']
-  };
-  return '<span class="pixel-name" aria-hidden="true">'+[...'OLYMP'].map(letter=>{
-    const rows=alphabet[letter].flatMap((row,y)=>[...row.matchAll(/1+/g)].map(run=>
-      '<i style="grid-row:'+(y+1)+';grid-column:'+(run.index+1)+' / span '+run[0].length+'"></i>'));
-    return '<span>'+rows.join('')+'</span>';
-  }).join('')+'</span>';
-}
-
 function archive(){
   const figures=locations.map(({id,title,alt},index)=>`
     <figure class="location" id="location-${id}">
@@ -49,20 +33,23 @@ function archive(){
 
 function home(c){
   const faq=(question,answer)=>`<details><summary>${question}<span aria-hidden="true">+</span></summary><p>${answer}</p></details>`;
-  return `<section class="cover">
-    <div class="cover-copy">
-      <p class="edition-label">Minecraft <span>Java + Bedrock</span></p>
-      <h1><span class="sr-only">OLYMP</span>${pixelWordmark()}</h1>
-      <p class="intro-title">Сервер совместного выживания</p>
-      <p class="cover-note">Начинаем в «Лавровом дворе». Игроки с&nbsp;компьютера, телефона и&nbsp;iPad попадают в&nbsp;один мир.</p>
-      <div class="actions">${action('/play','Как подключиться','gold','play')}<a class="telegram-link" href="${esc(c.telegram)}">${icon('telegram')} Telegram</a></div>
-    </div>${archive()}
+  const leaf = '<span class="laurel" aria-hidden="true">'+[0,1,2,3,4,5].map(i=>'<i style="--n:'+i+'"></i>').join('')+'</span>';
+  const editionLink=(key,label,note)=>`<a class="portal-link" href="/play/#${key}">${icon(key==='java'?'monitor':'phone')}<span><b>${label}</b><small>${note}</small></span>${icon('arrow')}</a>`;
+  return `<section class="skyline"><picture class="panorama"><source media="(max-width:640px)" srcset="/media/celestial-920.webp"><img src="/media/celestial-1920.webp" fetchpriority="high" alt="" width="1920" height="663"></picture>
+    <div class="crest"><p class="edition-label">Minecraft · Java &amp; Bedrock</p><div class="insignia">${leaf}<h1>OLYMP</h1>${leaf}</div>
+    <p class="motto">Твой мир у подножия Олимпа</p>
+    <p class="herodesc">Совместное выживание на ПК, телефоне и iPad.<br>${esc(c.access)} · ${esc(c.accessDetail.toLowerCase())}.</p>
+    <div class="heroactions">${action('/play','Как подключиться','gold','play')}${action('#world','О сервере','glass','cube')}</div></div>
   </section>
-  <section class="metrics" aria-label="Мониторинг и доступ">
-    <div class="stat headcount"><span>Игроков онлайн</span><b data-count>—</b><small data-connection aria-live="polite">Получаем данные…</small></div>
-    <div class="stat"><span>Доступ на сервер</span><b>${esc(c.access)}</b><small>${esc(c.accessDetail)}</small></div>
-    <div class="stat"><span>Последний ответ сервера</span><b data-time>—</b><small data-date>Время проверки</small></div>
-  </section>
+  <div class="atlas">
+  <div class="gateway">
+   <section class="realm-panel monitor-panel"><h2>${icon('bars')} Мониторинг сервера</h2><div class="numbers"><div><span class="online-count" data-count>—</span><span>игроков онлайн</span></div><div class="signal"><strong data-connection aria-live="polite">Получаем данные…</strong><small>Последний ответ · <time data-time>—</time></small><small data-date>—</small></div></div></section>
+   <section class="realm-panel"><h2>${icon('play')} Подключение к игре</h2><div class="platforms">${editionLink('java','Java Edition','Компьютер')}${editionLink('bedrock','Bedrock Edition','Телефон, iPad, Windows')}</div></section>
+  </div>
+  <div class="chronicle"><a class="news-card realm-panel" href="https://t.me/olympmi/3/95"><img src="/media/november.webp" width="125" height="115" alt=""><div><small>Новости · 21 ноября</small><h2>Большое обновление OLYMP</h2><p>Сайт, «Лавровый двор» и планы команды</p></div>${icon('external')}</a>
+  <a href="${esc(c.telegram)}" class="community realm-panel">${icon('telegram')}<div><small>Сообщество</small><h2>Наш Telegram</h2></div>${icon('external')}</a></div>
+  <section class="world-section" id="world"><div><p class="eyebrow">Из игры</p><h2>Мир OLYMP</h2><p>Первый шаг — в «Лавровом дворе». Посмотри, как выглядят шахта и песчаная арена на сервере.</p></div>${archive()}</section>
+  </div>
   <section class="handbook">
     <div class="questions"><h2>Перед входом</h2>
       ${faq('Как добавить OLYMP в Minecraft?','Выбери своё издание в <a href="/play">инструкции подключения</a>. Для Java понадобится адрес, для Bedrock — адрес и порт.')}
@@ -90,5 +77,5 @@ export function render(path,origin,c,privacy){
  else if(['/rules','/donate'].includes(path)){const rules=path==='/rules';content='<div class="coming"><div class="large-icon">'+icon(rules?'book':'chest')+'</div>'+k('В разработке')+'<h1>'+title+'</h1><p>'+(rules?'Мы готовим понятные правила проекта. После публикации они появятся на этой странице.':'Мы готовим раздел поддержки проекта. О запуске сообщим в нашем Telegram.')+'</p><div class="actions">'+action(c.telegram,'Наш Telegram','gold','telegram')+action('/','На главную','glass')+'</div></div>';}
  else content='<div class="coming">'+k('Ошибка 404')+'<h1>Страница не найдена</h1>'+action('/','На главную','gold')+'</div>';
  let desc=path==='/'?c.description:({'/play':'Адрес и инструкция входа для Java и Bedrock.','/contacts':'Новости и помощь в официальном сообществе OLYMP.','/rules':'Правила проекта находятся в разработке.','/donate':'Раздел поддержки OLYMP находится в разработке.','/privacy':'Как работает сайт и какие данные получает инфраструктура.'}[path]||title);
- return '<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#21251f"><title>'+esc(title)+(path==='/'?'':' · OLYMP')+'</title><meta name="description" content="'+esc(desc)+'"><meta property="og:type" content="website"><meta property="og:locale" content="ru_RU"><meta property="og:title" content="'+esc(title)+'"><meta property="og:description" content="'+esc(desc)+'"><meta property="og:image" content="'+origin+'/media/olymp-social.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Золотой герб OLYMP над храмом"><meta name="twitter:card" content="summary_large_image">'+(titles[path]?'<link rel="canonical" href="'+origin+path+'"><meta property="og:url" content="'+origin+path+'">':'<meta name="robots" content="noindex">')+'<link rel="icon" href="/media/favicon.ico"><link rel="apple-touch-icon" href="/media/olymp-icon.png"><link rel="stylesheet" href="/theme.css"><script src="/interface.js" defer></script></head><body><a href="#main" class="skip">К содержанию</a><header><div class="bar"><a href="/" class="brand" aria-label="OLYMP — главная">'+mark+'</a><nav id="nav" aria-label="Главное меню">'+linkList(path)+'</nav><div class="header-actions">'+(path==='/'?'':action('/play','Начать играть','header-button','play'))+'<button type="button" id="menu" aria-label="Открыть меню" aria-expanded="false" aria-controls="nav"><span></span><span></span></button></div></div></header><main id="main" class="'+(path==='/'?'home':'inner')+'">'+content+'</main><footer><div class="foot-row"><a class="brand" href="/">'+mark+'</a><div><a href="/contacts">Контакты</a><a href="/privacy">Конфиденциальность</a></div></div><p>'+esc(privacy.minecraftNotice)+'</p></footer><dialog id="gallery"><button type="button" aria-label="Закрыть просмотр">Закрыть ×</button><img width="1672" height="941" alt=""><p></p></dialog></body></html>';
+ return '<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#170f26"><title>'+esc(title)+(path==='/'?'':' · OLYMP')+'</title><meta name="description" content="'+esc(desc)+'"><meta property="og:type" content="website"><meta property="og:locale" content="ru_RU"><meta property="og:title" content="'+esc(title)+'"><meta property="og:description" content="'+esc(desc)+'"><meta property="og:image" content="'+origin+'/media/olymp-social.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Золотой герб OLYMP над храмом"><meta name="twitter:card" content="summary_large_image">'+(titles[path]?'<link rel="canonical" href="'+origin+path+'"><meta property="og:url" content="'+origin+path+'">':'<meta name="robots" content="noindex">')+'<link rel="icon" href="/media/favicon.ico"><link rel="apple-touch-icon" href="/media/olymp-icon.png"><link rel="stylesheet" href="/theme.css"><script src="/interface.js" defer></script></head><body><a href="#main" class="skip">К содержанию</a><header><div class="bar"><a href="/" class="brand" aria-label="OLYMP — главная">'+mark+'</a><nav id="nav" aria-label="Главное меню">'+linkList(path)+'</nav><div class="header-actions">'+(path==='/'?'':action('/play','Начать играть','header-button','play'))+'<button type="button" id="menu" aria-label="Открыть меню" aria-expanded="false" aria-controls="nav"><span></span><span></span></button></div></div></header><main id="main" class="'+(path==='/'?'home':'inner')+'">'+content+'</main><footer><div class="foot-row"><a class="brand" href="/">'+mark+'</a><div><a href="/contacts">Контакты</a><a href="/privacy">Конфиденциальность</a></div></div><p>'+esc(privacy.minecraftNotice)+'</p></footer><dialog id="gallery"><button type="button" aria-label="Закрыть просмотр">Закрыть ×</button><img width="1672" height="941" alt=""><p></p></dialog></body></html>';
 }
