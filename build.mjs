@@ -1,4 +1,5 @@
 import {readFile,writeFile,mkdir,copyFile} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
 import {render,titles} from './view.mjs';
 const project=new URL('https://w1st1r.github.io/olymp/');
 const config=JSON.parse(await readFile('config.json','utf8'));
@@ -6,12 +7,19 @@ const privacy=JSON.parse(await readFile('privacy.json','utf8'));
 const routes=Object.keys(titles).filter(s=>s.startsWith('/'));
 const publicPath=path=>project.href+path.slice(1)+(path==='/'?'':'/');
 const prefix=project.pathname.slice(0,-1);
+const assetIds={};
+for(const name of ['theme.css','interface.js']){
+  assetIds[name]=createHash('sha256').update(await readFile(name)).digest('hex').slice(0,10);
+}
 for(const route of [...routes,'404']){
   const page=route==='404'?'missing':route;
   let html=render(page,project.href.slice(0,-1),config,privacy)
     .replace(/(href|src|srcset)="\/(?!\/)/g,'$1="'+prefix+'/')
     .replace(/, \/media\//g,', '+prefix+'/media/')
     .replace('</head>','<meta name="referrer" content="no-referrer"><meta name="project-root" content="'+project.href+'"><meta name="monitor-source" content="https://api.mcstatus.io/v2/status/java/'+encodeURIComponent(config.javaFallback).replace('%3A',':')+'"></head>');
+  for(const [name,version] of Object.entries(assetIds)){
+    html=html.replace(prefix+'/'+name+'"',prefix+'/'+name+'?v='+version+'"');
+  }
   for(const path of routes.filter(x=>x!=='/')){
     html=html.replaceAll('href="'+prefix+path+'"','href="'+prefix+path+'/"').replaceAll('"'+project.origin+prefix+path+'"','"'+publicPath(path)+'"');
   }

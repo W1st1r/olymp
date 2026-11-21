@@ -74,3 +74,19 @@ if('IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion: reduc
  const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('reveal');obs.unobserve(e.target)}}));
  document.querySelectorAll('.section,.telegram-banner').forEach(el=>obs.observe(el));
 }
+
+const locationButtons = [...document.querySelectorAll('[data-location]')];
+if(locationButtons.length){
+  function selectLocation(selected){
+    for(const button of locationButtons){
+      const active=button===selected;
+      button.setAttribute('aria-pressed',String(active));
+      document.getElementById(button.getAttribute('aria-controls')).hidden=!active;
+    }
+  }
+  selectLocation(locationButtons[0]);
+  document.querySelector('.location-controls').hidden=false;
+  for(const button of locationButtons){
+    button.addEventListener('click',()=>selectLocation(button));
+  }
+}
