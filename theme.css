@@ -151,7 +151,7 @@ header{background:#170e25f5;border-bottom:1px solid #745163}.bar{min-height:62px
 .ability details{margin-left:1rem}.rank-body p,.rank-card p,.rank-body li,.donate-note p{line-height:1.6}
 .donate-purchase label,.donate-purchase textarea{display:block}.donate-purchase textarea{width:100%;box-sizing:border-box;resize:vertical;min-height:8rem;border-radius:8px;margin:.4rem 0 1rem;background:#171220;color:#eee5f7;padding:.8rem;font:inherit}.donate-purchase button{cursor:pointer}
 
-.rank-icon{display:block;image-rendering:pixelated;margin:0 0 .75rem}.ability summary,.rank-card span{min-height:44px}.rank-card:focus-visible,summary:focus-visible,button:focus-visible{outline:3px solid #fce2a3;outline-offset:3px}
+.rank-icon{display:block;width:clamp(6rem,10vw,7rem);height:auto;margin:0 0 .9rem}.page-head .rank-icon{margin:1.25rem 0 .75rem}.ability summary,.rank-card span{min-height:44px}.rank-card:focus-visible,summary:focus-visible,button:focus-visible{outline:3px solid #fce2a3;outline-offset:3px}
 
 #rank-compare select {
   min-height: 44px;
