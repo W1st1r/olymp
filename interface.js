@@ -90,3 +90,26 @@ if(locationButtons.length){
     button.addEventListener('click',()=>selectLocation(button));
   }
 }
+
+one('#copy-request')?.addEventListener('click',async()=>{
+  const field=one('#request-text'), status=one('#request-status');
+  try {
+    await navigator.clipboard.writeText(field.value);
+    status.textContent='Заявка скопирована.';
+  } catch {
+    field.focus();
+    field.select();
+    status.textContent='Текст выделен. Выберите «Скопировать» в меню устройства.';
+  }
+});
+
+if(one('#rank-compare')){
+ const cards=[...document.querySelectorAll('[data-rank]')],a=one('#compare-a'),b=one('#compare-b');
+ b.selectedIndex=1;
+ const featuresAt=id=>cards.slice(0,cards.findIndex(c=>c.dataset.rank===id)+1).flatMap(c=>c.dataset.features.split(','));
+ const update=()=>{const first=featuresAt(a.value),second=featuresAt(b.value);
+  const more=second.filter(id=>!first.includes(id)),less=first.filter(id=>!second.includes(id));
+  one('#compare-result').textContent='Общих возможностей: '+first.filter(id=>second.includes(id)).length+'. '+(more.length?'Только у '+b.value.toUpperCase()+': /'+more.join(', /')+'. ':'')+(less.length?'Только у '+a.value.toUpperCase()+': /'+less.join(', /')+'.':'');
+ };
+ a.addEventListener('change',update);b.addEventListener('change',update);update();
+}
