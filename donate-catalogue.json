@@ -1102,7 +1102,7 @@
           "allowed_context": "PHOTO_ZONE and active own photo_flight lease",
           "no_args_action": "show_menu_or_usage_without_mutation",
           "java": "Три дискретных безопасных уровня без произвольных float.",
-          "bedrock": "Те же уровни, реальная управляемость проверена на touch."
+          "bedrock": "Три уровня скорости для управления с сенсорного экрана."
         }
       ]
     },
