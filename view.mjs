@@ -75,7 +75,7 @@ export function render(path,origin,c,privacy){
  if(path==='/')content=home(c);
  else if(path==='/play')content=play(c);
  else if(path==='/contacts')content=contacts(c);
- else if(path==='/privacy')content='<div class="page-head">'+k('Документы проекта')+'<h1>Конфиденциальность</h1><p>Редакция от 21 ноября 2026 года.</p></div><article class="reading policy"><p>'+esc(privacy.lead)+'</p>'+privacy.sections.map(s=>'<h2>'+esc(s.title)+'</h2><p>'+esc(s.text)+(s.url?' <a href="'+esc(s.url)+'">'+esc(s.linkText)+'</a>':'')+'</p>').join('')+'<h2>Ответственный за сайт</h2><p>'+esc(privacy.operatorNote)+'</p></article>';
+ else if(path==='/privacy')content='<div class="page-head">'+k('Документы проекта')+'<h1>Конфиденциальность</h1><p>Редакция от '+esc(new Intl.DateTimeFormat('ru-RU',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(new Date(privacy.updated+'T00:00:00Z')))+'</p></div><article class="reading policy"><p>'+esc(privacy.lead)+'</p>'+privacy.sections.map(s=>'<h2>'+esc(s.title)+'</h2><p>'+esc(s.text)+(s.url?' <a href="'+esc(s.url)+'">'+esc(s.linkText)+'</a>':'')+'</p>').join('')+'<h2>Ответственный за сайт</h2><p>'+esc(privacy.operatorNote)+'</p></article>';
  else if(path==='/donate' || Object.hasOwn(rankTitles,path))content=donatePage(path);
  else if(path==='/rules')content=rulesPage();
  else content='<div class="coming">'+k('Ошибка 404')+'<h1>Страница не найдена</h1>'+action('/','На главную','gold')+'</div>';
