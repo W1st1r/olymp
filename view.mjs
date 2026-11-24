@@ -48,7 +48,7 @@ function home(c){
    <section class="realm-panel monitor-panel"><h2>${icon('bars')} Мониторинг сервера</h2><div class="numbers"><div><span class="online-count" data-count>—</span><span>игроков онлайн</span></div><div class="signal"><strong data-connection aria-live="polite">Получаем данные…</strong><small>Последний ответ · <time data-time>—</time></small><small data-date>—</small></div></div></section>
    <section class="realm-panel"><h2>${icon('play')} Подключение к игре</h2><div class="platforms">${editionLink('java','Java Edition','Компьютер')}${editionLink('bedrock','Bedrock Edition','Телефон, iPad, Windows')}</div></section>
   </div>
-  <div class="chronicle"><a class="news-card realm-panel" href="https://t.me/olympmi/3/95"><img src="/media/november.webp" width="125" height="115" alt=""><div><small>Новости · 21 ноября</small><h2>Большое обновление OLYMP</h2><p>Сайт, «Лавровый двор» и планы команды</p></div>${icon('external')}</a>
+  <div class="chronicle"><a class="news-card realm-panel" href="/rules/#section-9-14"><img src="/media/november.webp" width="125" height="115" alt=""><div><small>Новости · 24 ноября</small><h2>TITAN WARS BETA</h2><p>Клановые осады открыты. Условия боя и награды →</p></div>${icon('external')}</a>
   <a href="${esc(c.telegram)}" class="community realm-panel">${icon('telegram')}<div><small>Сообщество</small><h2>Наш Telegram</h2></div>${icon('external')}</a></div>
   <section class="world-section" id="world"><div><p class="eyebrow">Из игры</p><h2>Мир OLYMP</h2><p>Первый шаг — в «Лавровом дворе». Посмотри, как выглядят шахта и песчаная арена на сервере.</p></div>${archive()}</section>
   </div>
