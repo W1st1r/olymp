@@ -13,7 +13,7 @@ const action=(href,text,style='',glyph='arrow')=>'<a class="button '+style+'" hr
 const k=t=>'<p class="eyebrow">'+esc(t)+'</p>';
 const mark='<span class="wordmark"><img width="37" height="37" alt="" src="/media/olymp-icon.png">OLYMP</span>';
 const linkList=(active)=>links.map(([href,t])=>'<a '+(href===active?'aria-current="page" ':'')+'href="'+href+'">'+t+'</a>').join('');
-export const titles={...rankTitles,'/':'OLYMP — мир совместного выживания','/play':'Как начать играть','/rules':'Правила OLYMP','/donate':'Привилегии Олимпа','/contacts':'Контакты OLYMP','/privacy':'Конфиденциальность','404':'Страница не найдена'};
+export const titles={...rankTitles,'/voice':'Голосовой чат OLYMP','/':'OLYMP — мир совместного выживания','/play':'Как начать играть','/rules':'Правила OLYMP','/donate':'Привилегии Олимпа','/contacts':'Контакты OLYMP','/privacy':'Конфиденциальность','404':'Страница не найдена'};
 const locations = [
   {id:'mine-gate', title:'Вход в шахту', alt:'Каменные колонны и дорожка ко входу в шахту OLYMP'},
   {id:'sand-arena', title:'Песчаная арена', alt:'Песчаная площадка арены OLYMP с каменными трибунами'}
@@ -73,7 +73,15 @@ function contacts(c){
 export function render(path,origin,c,privacy){
  const title=titles[path] || titles['404']; let content;
  if(path==='/')content=home(c);
- else if(path==='/play')content=play(c);
+ else if(path==='/play')content=play(c)+'<section class="reading"><h2>Голосовое общение</h2><p><a href="/voice">Как подключить микрофон и какие устройства поддерживаются →</a></p></section>';
+ else if(path==='/voice')content=`<div class="page-head"><h1>Голосовой чат OLYMP</h1><p>Идёт проверка перед открытием BETA. Подключение на основном сервере пока закрыто.</p></div>
+ <article class="reading policy"><h2>Как подключиться после открытия</h2><ol>
+ <li>Зайди на OLYMP и введи <code>/voice</code>. Открой адрес из игрового меню и введи свой одноразовый код. Код предназначен только для тебя.</li>
+ <li>Выбери микрофон, проверь звук и выбери канал. «Рядом» учитывает расстояние и направление до игрока в пределах 32 блоков. «Клан» и «Группа» используют составы из игры.</li>
+ <li>В режиме переключения одно нажатие включает микрофон, следующее выключает. В режиме удержания отпусти кнопку, чтобы закончить передачу.</li></ol>
+ <h2>Java на компьютере</h2><p>Микрофон и воспроизведение работают в браузере. Для управления из игры понадобится клиентский мод OlympVoiceKeys для Fabric 26.3. Разреши игровые клавиши на голосовой странице и свяжи мод через F10. F8 переключает микрофон, F9 работает при удержании, F12 выключает микрофон.</p>
+ <h2>iPhone, iPad и Android</h2><p>При переключении с голосовой страницы обратно в Minecraft веб-клиент выключает микрофон. Одновременная игра и разговор на одном мобильном устройстве в RC1 не поддерживаются.</p>
+ <h2>Кто слышит голос</h2><p>Реле получает звук и пересылает его разрешённым участникам. Соединения зашифрованы. Реле не ведёт аудиозапись. Участника можно заглушить в настройках.</p></article>`;
  else if(path==='/contacts')content=contacts(c);
  else if(path==='/privacy')content='<div class="page-head">'+k('Документы проекта')+'<h1>Конфиденциальность</h1><p>Редакция от '+esc(new Intl.DateTimeFormat('ru-RU',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(new Date(privacy.updated+'T00:00:00Z')))+'</p></div><article class="reading policy"><p>'+esc(privacy.lead)+'</p>'+privacy.sections.map(s=>'<h2>'+esc(s.title)+'</h2><p>'+esc(s.text)+(s.url?' <a href="'+esc(s.url)+'">'+esc(s.linkText)+'</a>':'')+'</p>').join('')+'<h2>Ответственный за сайт</h2><p>'+esc(privacy.operatorNote)+'</p></article>';
  else if(path==='/donate' || Object.hasOwn(rankTitles,path))content=donatePage(path);
